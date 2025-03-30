@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Радио.Чайка</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(to left, #000, #333);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        #chat {
+            width: 80%;
+            max-width: 600px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        #input {
+            width: 80%;
+            max-width: 600px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-top: 10px;
+            color: bisque;
+            background-color: #555;
+            outline: none;
+            transition: background-color 0.3s ease;
+        }
+
+        #input:focus {
+            background-color: #777;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-container button {
+            background-color: #555;
+            border: none;
+            color: bisque;
+            padding: 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            width: 20%;
+            align-items:end;
+        }
+
+        .input-container button:hover {
+            background-color: #777;
+            color: aqua;
+            box-shadow: inset;
+        }
+
+        #playr {
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+        /* Кнопка воспроизведения */
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #93e70b, #2bff6b); /* градиент */
+            clip-path: polygon(0 0, 100% 50%, 0 100%); /* Треугольник */
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .play-button:focus {
+            outline: none;
+        }
+
+        .play-button.paused {
+            clip-path: none;
+            width: 90px;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #cf2929, #ad2b0a); /* градиент для паузы */
+        }
+
+        .play-button.paused:before,
+        .play-button.paused:after {
+            content: "";
+            width: 20px;
+            height: 30px;
+            background-color: white;
+        }
+
+        /* Треугольник для кнопки воспроизведения */
+        .play-button .triangle {
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+
+    </style>
+</head>
+
+<body>
+    
+    <div class="chat-container">
+        <div style="height: 20%;"></div>
+    <!-- Кнопка воспроизведения -->
+    <button class="play-button" id="playButton" onclick="togglePlayPause()">
+        <!-- <span class="triangle"></span> -->
+    </button>
+
+    <!-- MP3 плеер -->
+    <audio id="audioPlayer" style="display: none;" controls>
+        <source src="https://static.radio.varez4.fun/stream.mp3" type="audio/mp3">
+        Ваш браузер не поддерживает элемент audio.
+    </audio>
+    <!-- <audio id="playr" controls>
+        <source src="https://static.radio.varez4.fun/stream.mp3" type="audio/mp3">
+        Ваш браузер не поддерживает элемент audio.
+    </audio> -->
+    <div style="height: 20%;"></div>
+        <div id="chat"></div>
+        <div class="input-container"><!-- <input id="nick-name" type="text" placeholder="Введите Имя или никнейм" /> -->
+            <input type="text" id="input" placeholder="Введите сообщение и нажмите Enter..." />
+            <button id="button" onclick="sendMessage()">=></button>
+        </div>
+    </div>
+
+    <script>
+        const chatDiv = document.getElementById('chat');
+        const input = document.getElementById('input');
+        const nick = document.getElementById('nick-name')
+
+        // Подключение к WebSocket серверу
+        //const socket = new WebSocket('ws://localhost:8080');
+        const socketUrl = `ws://${window.location.hostname}:${window.location.port || 8080}`;
+        const socket = new WebSocket(socketUrl);
+
+        socket.onopen = () => {
+            console.log('Connected to the server');
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                //const message = JSON.parse(event.data);
+                //const messageElement = document.createElement('div');
+                //messageElement.textContent = message.message;  // Убедитесь, что сервер отправляет объект с полем message
+                //chatDiv.appendChild(messageElement);
+
+                //// Прокрутка чата вниз после добавления нового сообщения
+                //chatDiv.scrollTop = chatDiv.scrollHeight;
+                const message = JSON.parse(event.data);  // Пробуем распарсить JSON
+                console.log('Message received:', message);
+
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message.message;
+                chatDiv.appendChild(messageElement);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            } catch (error) {
+                console.error('Error parsing message:', error);
+            }
+
+        };
+
+        // Отправка сообщений на сервер
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && input.value.trim() !== '') { sendMessage(); }
+        });
+        function sendMessage() {
+            const message = input.value;
+            //socket.send(JSON.stringify({ message })); // Отправка сообщения на сервер
+            socket.send(`${message}`)
+            input.value = ''; // Очистить поле ввода
+        }
+
+
+
+                function togglePlayPause() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playButton.classList.add('paused');
+            } else {
+                audioPlayer.pause();
+                playButton.classList.remove('paused');
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>

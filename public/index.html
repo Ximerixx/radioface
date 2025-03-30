@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Радио.Чайка</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #000000, #111111); /* Плавный темный градиент */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            position: relative;
+        }
+
+        #chat {
+            width: 80%; /* Ширина чата теперь 100% */
+            max-width: 800px; /* Максимальная ширина */
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+#input {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    margin-top: 10px;
+    color: bisque;
+    background-color: #555;
+    outline: none;
+    transition: background-color 0.3s ease;
+    margin-bottom: 0; /* Убираем дополнительный отступ снизу */
+}
+
+        #input:focus {
+            background-color: #777;
+        }
+
+.input-container {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+       .input-container button {
+    background-color: #555;
+    border: none;
+    color: bisque;
+    padding: 10px;
+    border-radius: 5px;
+    margin-left: 10px;
+    cursor: pointer;
+    width: 15%;
+    display: flex;
+    align-items: center; /* Центрируем кнопку по вертикали */
+    justify-content: center;
+}
+
+.input-container button:hover {
+    background-color: #777;
+    color: aqua;
+    box-shadow: inset;
+}
+
+        /* Кнопка воспроизведения по центру */
+        .play-button {
+            width: 160px;
+            height: 80px;
+            background: linear-gradient(45deg, #93e70b, #2bff6b);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left: 150px;
+            transform: translateX(-50%);
+
+        }
+
+.play-button:hover {
+    background-color: #777;
+    box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);  /* Зелёное свечение */
+}
+
+
+        .play-button:focus {
+            outline: none;
+
+        }
+
+        .play-button.paused {
+            z-index: 100;
+            clip-path: none;
+            width: 120px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            background: linear-gradient(145deg, #cf2929, #ad2b0a);
+        }
+
+        .play-button.paused:before,
+        .play-button.paused:after {
+            content: "";
+            width: 20px;
+            height: 30px;
+            background-color: white;
+            margin-left: 110px;
+        }
+
+        footer {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background-color: #111;
+            font-family: monospace;
+            color: #bbb;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 14px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+        #logo {
+            position: absolute;
+            top: -100%;
+            width: 100%;
+        }
+        footer p {
+            margin: 0;
+        }
+        badcon {
+            background:#808080
+        }
+@keyframes pulse {
+    0% {
+        background-color: #93e70b;
+    }
+    50% {
+        background-color: #2bff6b;
+    }
+    100% {
+        background-color: #93e70b;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <div class="content">
+        <div class="input-container">
+        <img src="https://next.durka.su/s/NyK4yBRJGQ827Zg/download/VisitForeground.png" id="logo" alt="" srcset="" width="40%" >
+        
+        <!-- Кнопка воспроизведения -->
+        <button class="play-button" id="playButton" onclick="togglePlayPause()"></button>
+</div>
+        <!-- MP3 плеер -->
+        <audio id="audioPlayer" style="display: none;" controls>
+            <source src="https://static.radio.varez4.fun/stream.mp3" type="audio/mp3">
+            Ваш браузер не поддерживает элемент audio.
+        </audio>
+        
+</div>
+        <div id="chat"></div>
+
+        <div class="input-container">
+            <input type="text" id="input" placeholder="Введите сообщение и нажмите Enter..." />
+            <button id="button" onclick="sendMessage()">=></button>
+        </div>
+    </div>
+<div id="listenerCount" style="color: #fff; font-size: 18px; margin-top: 20px;">
+    Сейчас нас ...  <span id="count">0</span> онлайн
+</div>
+    <!-- Футер с Lorem Ipsum -->
+    <footer>
+        <p>Созданно при помощи пары банок пива. made by <a style="color: linear-gradient(145deg, #e73939, #ad2b0a);;" href="http://t.me/GeneralRainSilves">XimeriXX</a>  <a href="http://t.me/art_chayka">Сделяно специально для Артели Чайка.</a> & all rights reserved.</p>
+    </footer>
+
+    <script>
+        const chatDiv = document.getElementById('chat');
+        const input = document.getElementById('input');
+        const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
+        const socket = new WebSocket(socketUrl);
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playButton');
+
+        socket.onopen = () => {
+            console.log('Connected to the server');
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);  
+                console.log('Message received:', message);
+
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message.message;
+                chatDiv.appendChild(messageElement);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            } catch (error) {
+                console.error('Error parsing message:', error);
+            }
+        };
+
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && input.value.trim() !== '') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = input.value;
+            socket.send(`${message}`);
+            input.value = ''; // Очистить поле ввода
+        }
+
+        function togglePlayPause() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playButton.classList.add('paused');
+            } else {
+                audioPlayer.pause();
+                playButton.classList.remove('paused');
+            }
+        }
+
+
+
+
+
+        // URL потока
+const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
+
+// Функция для проверки существования потока
+function checkStreamAvailability() {
+    fetch(streamUrl, { method: 'HEAD' })
+        .then(response => {
+            if (response.ok) {
+                // Если файл существует, показываем кнопку воспроизведения
+                document.getElementById('playButton').style.display = 'block';
+                stopPulsing();
+            } else {
+                // Если файл не существует, скрываем кнопку и показываем сообщение
+                //document.getElementById('playButton').style.display = 'none';
+                alert("Поток недоступен, мы еще не начали или произошла ошибка при загрузке. Увы.");
+                stopPulsing();
+                playButton.classList.add('badcon'); 
+            }
+        })
+        .catch(error => {
+            // Если возникла ошибка при попытке получения файла
+            //document.getElementById('playButton').style.display = 'none';
+            alert(`Не удалось проверить доступность потока. Ошибка: ${error}` );
+        });
+}
+function startPulsing() {
+    playButton.classList.add('pulsing'); // Добавляем класс с анимацией пульсации
+}
+
+function stopPulsing() {
+    playButton.classList.remove('pulsing'); // Убираем класс с анимацией
+}
+
+
+
+
+
+
+
+
+
+ function updateListenerCount() {
+        const statusUrl = 'https://static.radio.varez4.fun:8000/status.xsl'; // Адрес статуса Icecast
+
+        fetch(statusUrl)
+            .then(response => response.text())
+            .then(data => {
+                // Парсим XML
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, "application/xml");
+
+                // Находим количество слушателей
+                const listenerCount = xmlDoc.querySelector('listeners').textContent;
+
+                // Обновляем отображение количества слушателей
+                const currentCount = document.getElementById('count');
+                
+                // Обновляем только если количество изменилось
+                if (currentCount.textContent !== listenerCount) {
+                    currentCount.textContent = listenerCount;
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка при получении данных с сервера Icecast:', error);
+            });
+    }
+
+    // Обновляем счетчик каждый 30 секунд
+    setInterval(updateListenerCount, 30000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Вызываем функцию при загрузке страницы
+window.onload = function() {
+    startPulsing();
+    checkStreamAvailability();
+            updateListenerCount();
+};
+    </script>
+</body>
+
+</html>
