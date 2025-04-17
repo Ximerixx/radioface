@@ -1,0 +1,16 @@
+[Unit]
+Description=Node.js App 
+After=network.target
+
+[Service]
+ExecStart=/root/n/bin/node /root/radioface/server.js
+WorkingDirectory=/root/radioface/
+Restart=always
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=inherit
+KillMode=process
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target
