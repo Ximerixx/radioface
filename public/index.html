@@ -32,7 +32,8 @@
         }
 
         #chat {
-            width: 80%; /* Ширина чата теперь 100% */
+            width: 80%; 
+            min-width: 300;
             max-width: 800px; /* Максимальная ширина */
             height: 300px;
             background: rgba(255, 255, 255, 0.1);
@@ -55,7 +56,7 @@
     background-color: #555;
     outline: none;
     transition: background-color 0.3s ease;
-    margin-bottom: 0; /* Убираем дополнительный отступ снизу */
+    margin-bottom: 0; 
 }
 
         #input:focus {
@@ -80,7 +81,7 @@
     cursor: pointer;
     width: 15%;
     display: flex;
-    align-items: center; /* Центрируем кнопку по вертикали */
+    align-items: center; 
     justify-content: center;
 }
 
@@ -90,12 +91,14 @@
     box-shadow: inset;
 }
 
-        /* Кнопка воспроизведения по центру */
+        /* Кнопка воспроизведения  */
         .play-button {
-            width: 160px;
+            width: 150px;
             height: 80px;
-            background: linear-gradient(45deg, #93e70b, #2bff6b);
+            background: linear-gradient(45deg, #cffa12, #1aff5f);
             clip-path: polygon(0 0, 100% 50%, 0 100%);
+            /* clip-path: polygon(0vw 0vh, 100vw 100vh, 0vw 100vh);  */
+            /* clip-path: polygon(0 0, 200px 50%, 0 100%); */
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -112,6 +115,7 @@
 
 .play-button:hover {
     background-color: #777;
+    width: 200px;
     box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);  /* Зелёное свечение */
 }
 
@@ -140,6 +144,45 @@
             margin-left: 110px;
         }
 
+
+
+/* Контейнер для регулировки громкости */
+.volume-container {
+
+    display: flex;
+    align-items: start;
+    z-index: 999;
+    flex-direction: column;
+    padding-left: -300px;
+}
+
+/* Ползунок регулировки громкости */
+.volume-control {
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 50;
+
+    width: 150px;  /* Ширина ползунка */
+    height: 6px;   /* Толщина ползунка */
+    border-radius: 50px;  /* Округленные углы */
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);  /* Градиентный фон */
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+/* Стиль для изменения цвета при движении ползунка */
+.volume-control:hover {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+}
+
+
+
+
+
+
+
+
+
         footer {
             width: 100%;
             padding: 20px;
@@ -155,27 +198,45 @@
         }
         #logo {
             position: absolute;
-            top: -100%;
+            top: -80%;
             width: 100%;
         }
         footer p {
             margin: 0;
         }
-        badcon {
-            background:#808080
+        @keyframes pulse {
+            0% {
+                background-color: #93e70b;
+            }
+            50% {
+                background-color: #2bff6b;
+            }
+            100% {
+                background-color: #93e70b;
+            }
         }
-@keyframes pulse {
-    0% {
-        background-color: #93e70b;
+        
+    .display_hide{
+        display: none;
     }
-    50% {
-        background-color: #2bff6b;
+    .display_show{
+        display: flex;
     }
-    100% {
-        background-color: #93e70b;
-    }
-}
 
+    #streamStats {
+        align-items: center;
+        color: #bbb;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width:50%;
+    }
+    #currentTrack{
+        width:fit-content;
+    }
+    #listenersCount{
+        width:fit-content;
+    }
     </style>
 </head>
 
@@ -183,17 +244,22 @@
 
     <div class="content">
         <div class="input-container">
-        <img src="https://next.durka.su/s/NyK4yBRJGQ827Zg/download/VisitForeground.png" id="logo" alt="" srcset="" width="40%" >
+            <!-- <img src="https://next.durka.su/s/NyK4yBRJGQ827Zg/download/VisitForeground.png" id="logo" alt="" srcset="" width="40%" > -->
+            <img src="https://static.radio.varez4.fun/fore_smal.png" id="logo" alt="" srcset="" width="40%" >
         
-        <!-- Кнопка воспроизведения -->
-        <button class="play-button" id="playButton" onclick="togglePlayPause()"></button>
-</div>
+            <!-- Кнопка воспроизведения -->
+            <button class="play-button" id="playButton" onclick="togglePlayPause()"></button>
+            <!-- <div class="volume-container">
+            <input type="range" id="volumeControl" class="volume-control" value="100" max="100">
+            </div> -->
+        </div>
         <!-- MP3 плеер -->
-        <audio id="audioPlayer" style="display: none;" controls>
-            <source src="https://static.radio.varez4.fun/stream.mp3" type="audio/mp3">
+        <audio class="display_hide" id="audioPlayer" controls>
+            <source src="https://static.radio.varez4.fun/stream.mp3"  preload="auto" type="audio/mp3">
             Ваш браузер не поддерживает элемент audio.
         </audio>
-        
+      
+
 </div>
         <div id="chat"></div>
 
@@ -202,10 +268,11 @@
             <button id="button" onclick="sendMessage()">=></button>
         </div>
     </div>
-<div id="listenerCount" style="color: #fff; font-size: 18px; margin-top: 20px;">
-    Сейчас нас ...  <span id="count">0</span> онлайн
+<div id="streamStats">
+    <div id="currentTrack">Запрашиваем трек...</div>
+    <div id="listenersCount">Проверяем сколько нас онлайн...</div>
 </div>
-    <!-- Футер с Lorem Ipsum -->
+    
     <footer>
         <p>Созданно при помощи пары банок пива. made by <a style="color: linear-gradient(145deg, #e73939, #ad2b0a);;" href="http://t.me/GeneralRainSilves">XimeriXX</a>  <a href="http://t.me/art_chayka">Сделяно специально для Артели Чайка.</a> & all rights reserved.</p>
     </footer>
@@ -213,11 +280,24 @@
     <script>
         const chatDiv = document.getElementById('chat');
         const input = document.getElementById('input');
-        const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
-        const socket = new WebSocket(socketUrl);
+        
         const audioPlayer = document.getElementById('audioPlayer');
         const playButton = document.getElementById('playButton');
 
+        const volumeControl = document.getElementById('volumeControl');
+
+
+    // API статуса
+    const icecastStatusUrl = 'https://static.radio.varez4.fun/status-json.xsl';
+    //сокет на чат, берем из заголовка барузерного окна
+    const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
+    //сырой адрес стрима
+    const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
+
+
+
+
+const socket = new WebSocket(socketUrl);
         socket.onopen = () => {
             console.log('Connected to the server');
         };
@@ -261,13 +341,16 @@
 
 
 
+// volumeControl.addEventListener('input', () => {
+//     audioPlayer.volume = volumeControl.value / 100;  // Устанавливаем громкость в пределах от 0 до 1
+// });
 
-        // URL потока
-const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
+
+
 
 // Функция для проверки существования потока
 function checkStreamAvailability() {
-    fetch(streamUrl, { method: 'HEAD' })
+    fetch(streamUrl, { method: 'GET' })
         .then(response => {
             if (response.ok) {
                 // Если файл существует, показываем кнопку воспроизведения
@@ -278,7 +361,6 @@ function checkStreamAvailability() {
                 //document.getElementById('playButton').style.display = 'none';
                 alert("Поток недоступен, мы еще не начали или произошла ошибка при загрузке. Увы.");
                 stopPulsing();
-                playButton.classList.add('badcon'); 
             }
         })
         .catch(error => {
@@ -287,6 +369,12 @@ function checkStreamAvailability() {
             alert(`Не удалось проверить доступность потока. Ошибка: ${error}` );
         });
 }
+
+
+
+
+
+
 function startPulsing() {
     playButton.classList.add('pulsing'); // Добавляем класс с анимацией пульсации
 }
@@ -298,39 +386,43 @@ function stopPulsing() {
 
 
 
+// Функция для получения и парсинга состояния
+async function fetchIcecastStatus() {
+  try {
+    // Запрашиваем статус сервера в формате JSON
+    const response = await fetch(icecastStatusUrl);
+    if (!response.ok) {
+      throw new Error('Не удалось получить данные от IceCast');
 
 
-
-
-
- function updateListenerCount() {
-        const statusUrl = 'https://static.radio.varez4.fun:8000/status.xsl'; // Адрес статуса Icecast
-
-        fetch(statusUrl)
-            .then(response => response.text())
-            .then(data => {
-                // Парсим XML
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data, "application/xml");
-
-                // Находим количество слушателей
-                const listenerCount = xmlDoc.querySelector('listeners').textContent;
-
-                // Обновляем отображение количества слушателей
-                const currentCount = document.getElementById('count');
-                
-                // Обновляем только если количество изменилось
-                if (currentCount.textContent !== listenerCount) {
-                    currentCount.textContent = listenerCount;
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных с сервера Icecast:', error);
-            });
     }
 
-    // Обновляем счетчик каждый 30 секунд
-    setInterval(updateListenerCount, 30000);
+    // Получаем данные в формате JSON
+    const data = await response.json();
+
+    // Извлекаем информацию
+    const currentTrack = data.icestats.source.title || 'Нет информации о треке';
+    const listeners = data.icestats.source.listeners || 'Нет ответа, скорее всего 0';
+
+    // Выводим информацию в консоль
+    console.log('Текущий трек:', currentTrack);
+    console.log('Количество слушателей:', listeners);
+
+    // Отображаем информацию на странице
+    document.getElementById('currentTrack').textContent = `Играет: ${currentTrack}`;
+    document.getElementById('listenersCount').textContent = `Слушателей онлайн: ${listeners}`;
+  } catch (error) {
+    console.error('Ошибка при получении данных:', error);
+
+          //если ниихя не получилось, говорим пользователю
+          document.getElementById('currentTrack').textContent = null;
+      document.getElementById('listenersCount').textContent = null;
+  }
+}
+
+
+
+
 
 
 
@@ -354,8 +446,11 @@ function stopPulsing() {
 window.onload = function() {
     startPulsing();
     checkStreamAvailability();
-            updateListenerCount();
+    fetchIcecastStatus();
 };
+    // счетчик 30 секунд
+    
+    setInterval(fetchIcecastStatus, 10000);
     </script>
 </body>
 
