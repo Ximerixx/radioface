@@ -255,7 +255,7 @@
         </div>
         <!-- MP3 плеер -->
         <audio class="display_hide" id="audioPlayer" controls>
-            <source src="https://static.radio.varez4.fun/stream.mp3"  preload="auto" type="audio/mp3">
+            <source src=""  preload="auto" type="audio/mp3">
             Ваш браузер не поддерживает элемент audio.
         </audio>
       
@@ -293,6 +293,7 @@
     const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
     //сырой адрес стрима
     const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
+    const streamUrlFall = 'https://static.radio.durka.su/music_stream.mp3';
 
 
 
@@ -316,14 +317,16 @@ const socket = new WebSocket(socketUrl);
             }
         };
 
+        
+
         input.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' && input.value.trim() !== '') {
                 sendMessage();
             }
         });
 
-        function sendMessage() {
-            const message = input.value;
+        function sendMessage(argumetMessage) {
+            const message = argumetMessage || input.value;
             socket.send(`${message}`);
             input.value = ''; // Очистить поле ввода
         }
@@ -339,7 +342,12 @@ const socket = new WebSocket(socketUrl);
         }
 
 
-
+function selfMessage(message){
+    const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                chatDiv.appendChild(messageElement);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+}
 
 // volumeControl.addEventListener('input', () => {
 //     audioPlayer.volume = volumeControl.value / 100;  // Устанавливаем громкость в пределах от 0 до 1
@@ -355,18 +363,45 @@ function checkStreamAvailability() {
             if (response.ok) {
                 // Если файл существует, показываем кнопку воспроизведения
                 document.getElementById('playButton').style.display = 'block';
+                audioPlayer.src = `${streamUrl}`;
                 stopPulsing();
             } else {
                 // Если файл не существует, скрываем кнопку и показываем сообщение
                 //document.getElementById('playButton').style.display = 'none';
-                alert("Поток недоступен, мы еще не начали или произошла ошибка при загрузке. Увы.");
+                //alert("Поток недоступен, мы еще не начали или произошла ошибка при загрузке. Увы.");
                 stopPulsing();
+                console.log
+                selfMessage('Прямой эфирр еще не начался... Но у нас есть музыка!');
+                checkFallbackStream();
             }
         })
         .catch(error => {
             // Если возникла ошибка при попытке получения файла
             //document.getElementById('playButton').style.display = 'none';
-            alert(`Не удалось проверить доступность потока. Ошибка: ${error}` );
+            console.log(`Поток с пульта не обнаружен. Ошибка: ${error}` );
+        });
+}
+
+function checkFallbackStream() {
+    fetch(streamUrlFall, { method: 'GET' })
+        .then(response => {
+            if (response.ok) {
+                // Если файл существует, показываем кнопку воспроизведения
+                document.getElementById('playButton').style.display = 'block';
+                audioPlayer.src = `${streamUrlFall}`;
+                stopPulsing();
+            } else {
+                // Если файл не существует, скрываем кнопку и показываем сообщение
+                //document.getElementById('playButton').style.display = 'none';
+                alert("Потоки недоступны, мы еще не начали или произошла ошибка при загрузке. Увы.");
+                stopPulsing();
+                checkFallbackStream();
+            }
+        })
+        .catch(error => {
+            // Если возникла ошибка при попытке получения файла
+            //document.getElementById('playButton').style.display = 'none';
+            console.log(`Ни один поток не отвечает. Ошибка: ${error}` );
         });
 }
 
