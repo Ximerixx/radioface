@@ -11,7 +11,8 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background: linear-gradient(45deg, #000000, #111111); /* Плавный темный градиент */
+            background: linear-gradient(45deg, #000000, #111111);
+            /* Плавный темный градиент */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -32,9 +33,10 @@
         }
 
         #chat {
-            width: 80%; 
+            width: 80%;
             min-width: 300;
-            max-width: 800px; /* Максимальная ширина */
+            max-width: 800px;
+            /* Максимальная ширина */
             height: 300px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -45,51 +47,51 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
 
-#input {
-    width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    margin-top: 10px;
-    color: bisque;
-    background-color: #555;
-    outline: none;
-    transition: background-color 0.3s ease;
-    margin-bottom: 0; 
-}
+        #input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-top: 10px;
+            color: bisque;
+            background-color: #555;
+            outline: none;
+            transition: background-color 0.3s ease;
+            margin-bottom: 0;
+        }
 
         #input:focus {
             background-color: #777;
         }
 
-.input-container {
-    display: flex;
-    align-items: center;
-    width: 80%;
-    max-width: 800px;
-    margin-bottom: 20px;
-}
+        .input-container {
+            display: flex;
+            align-items: center;
+            width: 80%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
 
-       .input-container button {
-    background-color: #555;
-    border: none;
-    color: bisque;
-    padding: 10px;
-    border-radius: 5px;
-    margin-left: 10px;
-    cursor: pointer;
-    width: 15%;
-    display: flex;
-    align-items: center; 
-    justify-content: center;
-}
+        .input-container button {
+            background-color: #555;
+            border: none;
+            color: bisque;
+            padding: 10px;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            width: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.input-container button:hover {
-    background-color: #777;
-    color: aqua;
-    box-shadow: inset;
-}
+        .input-container button:hover {
+            background-color: #777;
+            color: aqua;
+            box-shadow: inset;
+        }
 
         /* Кнопка воспроизведения  */
         .play-button {
@@ -113,11 +115,12 @@
 
         }
 
-.play-button:hover {
-    background-color: #777;
-    width: 200px;
-    box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);  /* Зелёное свечение */
-}
+        .play-button:hover {
+            background-color: #777;
+            width: 200px;
+            box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);
+            /* Зелёное свечение */
+        }
 
 
         .play-button:focus {
@@ -146,34 +149,38 @@
 
 
 
-/* Контейнер для регулировки громкости */
-.volume-container {
+        /* Контейнер для регулировки громкости */
+        .volume-container {
 
-    display: flex;
-    align-items: start;
-    z-index: 999;
-    flex-direction: column;
-    padding-left: -300px;
-}
+            display: flex;
+            align-items: start;
+            z-index: 999;
+            flex-direction: column;
+            padding-left: -300px;
+        }
 
-/* Ползунок регулировки громкости */
-.volume-control {
-    -webkit-appearance: none;
-    appearance: none;
-    padding: 50;
+        /* Ползунок регулировки громкости */
+        .volume-control {
+            -webkit-appearance: none;
+            appearance: none;
+            padding: 50;
 
-    width: 150px;  /* Ширина ползунка */
-    height: 6px;   /* Толщина ползунка */
-    border-radius: 50px;  /* Округленные углы */
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);  /* Градиентный фон */
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
+            width: 150px;
+            /* Ширина ползунка */
+            height: 6px;
+            /* Толщина ползунка */
+            border-radius: 50px;
+            /* Округленные углы */
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 100%);
+            /* Градиентный фон */
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
 
-/* Стиль для изменения цвета при движении ползунка */
-.volume-control:hover {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
-}
+        /* Стиль для изменения цвета при движении ползунка */
+        .volume-control:hover {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
 
 
 
@@ -196,47 +203,55 @@
             font-size: 14px;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
         }
+
         #logo {
             position: absolute;
             top: -80%;
             width: 100%;
         }
+
         footer p {
             margin: 0;
         }
+
         @keyframes pulse {
             0% {
                 background-color: #93e70b;
             }
+
             50% {
                 background-color: #2bff6b;
             }
+
             100% {
                 background-color: #93e70b;
             }
         }
-        
-    .display_hide{
-        display: none;
-    }
-    .display_show{
-        display: flex;
-    }
 
-    #streamStats {
-        align-items: center;
-        color: #bbb;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        width:50%;
-    }
-    #currentTrack{
-        width:fit-content;
-    }
-    #listenersCount{
-        width:fit-content;
-    }
+        .display_hide {
+            display: none;
+        }
+
+        .display_show {
+            display: flex;
+        }
+
+        #streamStats {
+            align-items: center;
+            color: #bbb;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 50%;
+        }
+
+        #currentTrack {
+            width: fit-content;
+        }
+
+        #listenersCount {
+            width: fit-content;
+        }
     </style>
 </head>
 
@@ -245,8 +260,8 @@
     <div class="content">
         <div class="input-container">
             <!-- <img src="https://next.durka.su/s/NyK4yBRJGQ827Zg/download/VisitForeground.png" id="logo" alt="" srcset="" width="40%" > -->
-            <img src="https://static.radio.varez4.fun/fore_smal.png" id="logo" alt="" srcset="" width="40%" >
-        
+            <img src="https://static.radio.varez4.fun/fore_smal.png" id="logo" alt="" srcset="" width="40%">
+
             <!-- Кнопка воспроизведения -->
             <button class="play-button" id="playButton" onclick="togglePlayPause()"></button>
             <!-- <div class="volume-container">
@@ -255,57 +270,59 @@
         </div>
         <!-- MP3 плеер -->
         <audio class="display_hide" id="audioPlayer" controls>
-            <source src=""  preload="auto" type="audio/mp3">
+            <source src="" preload="auto" type="audio/mp3">
             Ваш браузер не поддерживает элемент audio.
         </audio>
-      
 
-</div>
-        <div id="chat"></div>
 
-        <div class="input-container">
-            <input type="text" id="input" placeholder="Введите сообщение и нажмите Enter..." />
-            <button id="button" onclick="sendMessage()">=></button>
-        </div>
     </div>
-<div id="streamStats">
-    <div id="currentTrack">Запрашиваем трек...</div>
-    <div id="listenersCount">Проверяем сколько нас онлайн...</div>
-</div>
-    
+    <div id="chat"></div>
+
+    <div class="input-container">
+        <input type="text" id="input" placeholder="Введите сообщение и нажмите Enter..." />
+        <button id="button" onclick="sendMessage()">=></button>
+    </div>
+    </div>
+    <div id="streamStats">
+        <div id="currentTrack">Запрашиваем трек...</div>
+        <div id="listenersCount">Проверяем сколько нас онлайн...</div>
+    </div>
+
     <footer>
-        <p>Созданно при помощи пары банок пива. made by <a style="color: linear-gradient(145deg, #e73939, #ad2b0a);;" href="http://t.me/GeneralRainSilves">XimeriXX</a>  <a href="http://t.me/art_chayka">Сделяно специально для Артели Чайка.</a> & all rights reserved.</p>
+        <p>Созданно при помощи пары банок пива. made by <a style="color: linear-gradient(145deg, #e73939, #ad2b0a);;"
+                href="http://t.me/GeneralRainSilves">XimeriXX</a> <a href="http://t.me/art_chayka">Сделяно специально
+                для Артели Чайка.</a> & all rights reserved.</p>
     </footer>
 
     <script>
         const chatDiv = document.getElementById('chat');
         const input = document.getElementById('input');
-        
+
         const audioPlayer = document.getElementById('audioPlayer');
         const playButton = document.getElementById('playButton');
 
         const volumeControl = document.getElementById('volumeControl');
 
 
-    // API статуса
-    const icecastStatusUrl = 'https://static.radio.varez4.fun/status-json.xsl';
-    //сокет на чат, берем из заголовка барузерного окна
-    const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
-    //сырой адрес стрима
-    const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
-    const streamUrlFall = 'https://static.radio.durka.su/music_stream.mp3';
+        // API статуса
+        const icecastStatusUrl = 'https://static.radio.varez4.fun/status-json.xsl';
+        //сокет на чат, берем из заголовка барузерного окна
+        const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
+        //сырой адрес стрима
+        const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
+        const streamUrlFall = 'https://static.radio.durka.su/music_stream.mp3';
 
 
 
 
-const socket = new WebSocket(socketUrl);
+        const socket = new WebSocket(socketUrl);
         socket.onopen = () => {
             console.log('Connected to the server');
         };
 
         socket.onmessage = (event) => {
             try {
-                const message = JSON.parse(event.data);  
+                const message = JSON.parse(event.data);
                 console.log('Message received:', message);
 
                 const messageElement = document.createElement('div');
@@ -317,7 +334,7 @@ const socket = new WebSocket(socketUrl);
             }
         };
 
-        
+
 
         input.addEventListener('keydown', (event) => {
             if (event.key === 'Enter' && input.value.trim() !== '') {
@@ -342,118 +359,118 @@ const socket = new WebSocket(socketUrl);
         }
 
 
-function selfMessage(message){
-    const messageElement = document.createElement('div');
-                messageElement.textContent = message;
-                chatDiv.appendChild(messageElement);
-                chatDiv.scrollTop = chatDiv.scrollHeight;
-}
+        function selfMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatDiv.appendChild(messageElement);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
 
-// volumeControl.addEventListener('input', () => {
-//     audioPlayer.volume = volumeControl.value / 100;  // Устанавливаем громкость в пределах от 0 до 1
-// });
-
-
+        // volumeControl.addEventListener('input', () => {
+        //     audioPlayer.volume = volumeControl.value / 100;  // Устанавливаем громкость в пределах от 0 до 1
+        // });
 
 
-// Функция для проверки существования потока
-function checkStreamAvailability() {
-    fetch(streamUrl, { method: 'GET' })
-        .then(response => {
-            if (response.ok) {
-                // Если файл существует, показываем кнопку воспроизведения
-                document.getElementById('playButton').style.display = 'block';
-                audioPlayer.src = `${streamUrl}`;
-                stopPulsing();
-            } else {
-                // Если файл не существует, скрываем кнопку и показываем сообщение
-                //document.getElementById('playButton').style.display = 'none';
-                //alert("Поток недоступен, мы еще не начали или произошла ошибка при загрузке. Увы.");
-                stopPulsing();
-                console.log
-                selfMessage('Прямой эфирр еще не начался... Но у нас есть музыка!');
-                checkFallbackStream();
+
+
+        // Функция для проверки существования потока
+        function checkStreamAvailability() {
+            fetch(streamUrl, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        // Если файл существует, показываем кнопку воспроизведения
+                        document.getElementById('playButton').style.display = 'block';
+                        audioPlayer.src = `${streamUrl}`;
+                        stopPulsing();
+                    } else {
+                        // Если файл не существует, скрываем кнопку и показываем сообщение
+                        //document.getElementById('playButton').style.display = 'none';
+                        //alert("Поток недоступен, мы еще не начали или произошла ошибка при загрузке. Увы.");
+                        stopPulsing();
+                        console.log
+                        selfMessage('Прямой эфирр еще не начался... Но у нас есть музыка!');
+                        checkFallbackStream();
+                    }
+                })
+                .catch(error => {
+                    // Если возникла ошибка при попытке получения файла
+                    //document.getElementById('playButton').style.display = 'none';
+                    console.log(`Поток с пульта не обнаружен. Ошибка: ${error}`);
+                });
+        }
+
+        function checkFallbackStream() {
+            fetch(streamUrlFall, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        // Если файл существует, показываем кнопку воспроизведения
+                        document.getElementById('playButton').style.display = 'block';
+                        audioPlayer.src = `${streamUrlFall}`;
+                        stopPulsing();
+                    } else {
+                        // Если файл не существует, скрываем кнопку и показываем сообщение
+                        //document.getElementById('playButton').style.display = 'none';
+                        alert("Потоки недоступны, мы еще не начали или произошла ошибка при загрузке. Увы.");
+                        stopPulsing();
+                        checkFallbackStream();
+                    }
+                })
+                .catch(error => {
+                    // Если возникла ошибка при попытке получения файла
+                    //document.getElementById('playButton').style.display = 'none';
+                    console.log(`Ни один поток не отвечает. Ошибка: ${error}`);
+                });
+        }
+
+
+
+
+
+
+        function startPulsing() {
+            playButton.classList.add('pulsing'); // Добавляем класс с анимацией пульсации
+        }
+
+        function stopPulsing() {
+            playButton.classList.remove('pulsing'); // Убираем класс с анимацией
+        }
+
+
+
+
+        // Функция для получения и парсинга состояния
+        async function fetchIcecastStatus() {
+            try {
+                // Запрашиваем статус сервера в формате JSON
+                const response = await fetch(icecastStatusUrl);
+                if (!response.ok) {
+                    throw new Error('Не удалось получить данные от IceCast');
+
+
+                }
+
+                // Получаем данные в формате JSON
+                const data = await response.json();
+
+                // Извлекаем информацию
+                const currentTrack = data.icestats.source.title || 'Нет информации о треке';
+                const listeners = data.icestats.source.listeners || 'Нет ответа, скорее всего 0';
+
+                // Выводим информацию в консоль
+                console.log('Текущий трек:', currentTrack);
+                console.log('Количество слушателей:', listeners);
+
+                // Отображаем информацию на странице
+                document.getElementById('currentTrack').textContent = `Играет: ${currentTrack}`;
+                document.getElementById('listenersCount').textContent = `Слушателей онлайн: ${listeners}`;
+            } catch (error) {
+                console.error('Ошибка при получении данных:', error);
+
+                //если ниихя не получилось, говорим пользователю
+                document.getElementById('currentTrack').textContent = null;
+                document.getElementById('listenersCount').textContent = null;
             }
-        })
-        .catch(error => {
-            // Если возникла ошибка при попытке получения файла
-            //document.getElementById('playButton').style.display = 'none';
-            console.log(`Поток с пульта не обнаружен. Ошибка: ${error}` );
-        });
-}
-
-function checkFallbackStream() {
-    fetch(streamUrlFall, { method: 'GET' })
-        .then(response => {
-            if (response.ok) {
-                // Если файл существует, показываем кнопку воспроизведения
-                document.getElementById('playButton').style.display = 'block';
-                audioPlayer.src = `${streamUrlFall}`;
-                stopPulsing();
-            } else {
-                // Если файл не существует, скрываем кнопку и показываем сообщение
-                //document.getElementById('playButton').style.display = 'none';
-                alert("Потоки недоступны, мы еще не начали или произошла ошибка при загрузке. Увы.");
-                stopPulsing();
-                checkFallbackStream();
-            }
-        })
-        .catch(error => {
-            // Если возникла ошибка при попытке получения файла
-            //document.getElementById('playButton').style.display = 'none';
-            console.log(`Ни один поток не отвечает. Ошибка: ${error}` );
-        });
-}
-
-
-
-
-
-
-function startPulsing() {
-    playButton.classList.add('pulsing'); // Добавляем класс с анимацией пульсации
-}
-
-function stopPulsing() {
-    playButton.classList.remove('pulsing'); // Убираем класс с анимацией
-}
-
-
-
-
-// Функция для получения и парсинга состояния
-async function fetchIcecastStatus() {
-  try {
-    // Запрашиваем статус сервера в формате JSON
-    const response = await fetch(icecastStatusUrl);
-    if (!response.ok) {
-      throw new Error('Не удалось получить данные от IceCast');
-
-
-    }
-
-    // Получаем данные в формате JSON
-    const data = await response.json();
-
-    // Извлекаем информацию
-    const currentTrack = data.icestats.source.title || 'Нет информации о треке';
-    const listeners = data.icestats.source.listeners || 'Нет ответа, скорее всего 0';
-
-    // Выводим информацию в консоль
-    console.log('Текущий трек:', currentTrack);
-    console.log('Количество слушателей:', listeners);
-
-    // Отображаем информацию на странице
-    document.getElementById('currentTrack').textContent = `Играет: ${currentTrack}`;
-    document.getElementById('listenersCount').textContent = `Слушателей онлайн: ${listeners}`;
-  } catch (error) {
-    console.error('Ошибка при получении данных:', error);
-
-          //если ниихя не получилось, говорим пользователю
-          document.getElementById('currentTrack').textContent = null;
-      document.getElementById('listenersCount').textContent = null;
-  }
-}
+        }
 
 
 
@@ -476,17 +493,21 @@ async function fetchIcecastStatus() {
 
 
 
+        // Вызываем функцию при загрузке страницы
+        window.onload = function () {
+            startPulsing();
+            checkStreamAvailability();
+            fetchIcecastStatus();
+        };
+        // счетчик 30 секунд
 
-// Вызываем функцию при загрузке страницы
-window.onload = function() {
-    startPulsing();
-    checkStreamAvailability();
-    fetchIcecastStatus();
-};
-    // счетчик 30 секунд
-    
-    setInterval(fetchIcecastStatus, 10000);
+        setInterval(fetchIcecastStatus, 10000);
     </script>
+
+    <script type="module" src="/pushClient.js"></script>
+    <button id="enablePush">Включить уведомления (BETA)</button>
+
+
 </body>
 
 </html>

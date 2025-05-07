@@ -1,0 +1,5 @@
+keys.json
+subscriptions.json
+secret.json
+*test*
+node_modules
