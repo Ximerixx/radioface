@@ -260,7 +260,7 @@
     <div class="content">
         <div class="input-container">
             <!-- <img src="https://next.durka.su/s/NyK4yBRJGQ827Zg/download/VisitForeground.png" id="logo" alt="" srcset="" width="40%" > -->
-            <img src="https://static.radio.varez4.fun/fore_smal.png" id="logo" alt="" srcset="" width="40%">
+            <img src="VisitForeground.png" id="logo" alt="" srcset="" width="40%">
 
             <!-- Кнопка воспроизведения -->
             <button class="play-button" id="playButton" onclick="togglePlayPause()"></button>
@@ -305,11 +305,11 @@
 
 
         // API статуса
-        const icecastStatusUrl = 'https://static.radio.varez4.fun/status-json.xsl';
+        const icecastStatusUrl = 'https://static.radio.durka.su/status-json.xsl';
         //сокет на чат, берем из заголовка барузерного окна
         const socketUrl = `wss://${window.location.hostname}`;        //:${window.location.port || 8080}`;
         //сырой адрес стрима
-        const streamUrl = 'https://static.radio.varez4.fun/stream.mp3';
+        const streamUrl = 'https://static.radio.durka.su/stream.mp3';
         const streamUrlFall = 'https://static.radio.durka.su/music_stream.mp3';
 
 

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Радио.Чайка — технопанк</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-secondary: #111;
+            --text: #eee;
+            --highlight: #aaa;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: repeating-linear-gradient(0deg,
+                    var(--bg),
+                    var(--bg) 1px,
+                    #0c0c0c 2px,
+                    var(--bg) 3px);
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #logo {
+            width: 40%;
+            max-width: 400px;
+            transition: transform 0.5s ease;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 20px 0;
+            gap: 15px;
+        }
+
+        .play-button {
+            width: 140px;
+            height: 70px;
+            background: linear-gradient(45deg, #cfcfcf, #444);
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            width: 180px;
+            box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .play-button.paused {
+            clip-path: none;
+            background: linear-gradient(145deg, #cf2929, #ad2b0a);
+            width: 120px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .play-button.paused::before,
+        .play-button.paused::after {
+            content: "";
+            width: 20px;
+            height: 30px;
+            background-color: white;
+        }
+
+        #chat {
+            width: 90%;
+            max-width: 800px;
+            height: 300px;
+            background: var(--glass);
+            border-radius: 16px;
+            padding: 15px;
+            overflow-y: auto;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            box-shadow:
+                inset 0 0 25px rgba(255, 255, 255, 0.1),
+                0 0 30px rgba(0, 255, 0, 0.05);
+            backdrop-filter: blur(3px);
+            border: 1px solid #444;
+            margin-bottom: 20px;
+        }
+
+        #input {
+            width: 70%;
+            padding: 10px;
+            font-size: 14px;
+            background-color: #333;
+            border: none;
+            border-radius: 4px;
+            color: #eee;
+        }
+
+        .input-container button {
+            background-color: #444;
+            border: none;
+            padding: 10px 20px;
+            color: #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #666;
+            color: #0f0;
+        }
+
+        #streamStats {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+            font-family: monospace;
+            font-size: 13px;
+            color: var(--highlight);
+            padding: 10px 0;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            font-family: monospace;
+            background-color: #111;
+            color: #888;
+            font-size: 13px;
+            box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        footer a {
+            color: #ccc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <!-- <img id="logo" src="https://static.radio.varez4.fun/fore_smal.png" alt="logo"> -->
+        <img id="logo" src="VisitForeground.png" alt="logo">
+        <div class="input-container">
+            <button class="play-button" id="playButton" onclick="togglePlayPause()"></button>
+        </div>
+
+        <audio id="audioPlayer" class="display_hide">
+            <source src="" type="audio/mp3">
+            Ваш браузер не поддерживает audio.
+        </audio>
+
+        <div id="chat"></div>
+
+        <div class="input-container">
+            <input type="text" id="input" placeholder="Введите сообщение и нажмите Enter...">
+            <button id="button" onclick="sendMessage()">=></button>
+        </div>
+
+        <div id="streamStats">
+            <div id="currentTrack">Загрузка трека...</div>
+            <div id="listenersCount">Подключаемся...</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Сделано при помощи пары банок пива — <a href="http://t.me/GeneralRainSilves">XimeriXX</a> & <a
+                href="http://t.me/art_chayka">Артель Чайка</a></p>
+    </footer>
+
+    <script>
+        const chatDiv = document.getElementById('chat');
+        const input = document.getElementById('input');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playButton');
+
+        const streamUrl = 'https://static.radio.durka.su/stream.mp3';
+        const streamUrlFall = 'https://static.radio.durka.su/music_stream.mp3';
+        const icecastStatusUrl = 'https://static.radio.durka.su/status-json.xsl';
+        // const socketUrl = `wss://${window.location.hostname}`;
+        const socketUrl = `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.hostname}:${location.port || 80}`;
+
+        const socket = new WebSocket(socketUrl);
+
+        socket.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message.message;
+                chatDiv.appendChild(messageElement);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            } catch (error) {
+                console.error('Error parsing message:', error);
+            }
+        };
+
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && input.value.trim() !== '') sendMessage();
+        });
+
+        function sendMessage(msg) {
+            const message = msg || input.value;
+            socket.send(message);
+            input.value = '';
+        }
+
+        function selfMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatDiv.appendChild(messageElement);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+        }
+
+        function togglePlayPause() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playButton.classList.add('paused');
+            } else {
+                audioPlayer.pause();
+                playButton.classList.remove('paused');
+            }
+        }
+
+        async function fetchIcecastStatus() {
+            try {
+                const response = await fetch(icecastStatusUrl);
+                if (!response.ok) throw new Error('IceCast недоступен');
+                const data = await response.json();
+                const currentTrack = data.icestats.source.title || 'Нет инфы';
+                const listeners = data.icestats.source.listeners || '0';
+                document.getElementById('currentTrack').textContent = `Играет: ${currentTrack}`;
+                document.getElementById('listenersCount').textContent = `Слушателей онлайн: ${listeners}`;
+            } catch (error) {
+                console.error('Icecast ошибка:', error);
+                document.getElementById('currentTrack').textContent = '';
+                document.getElementById('listenersCount').textContent = '';
+            }
+        }
+
+        function checkStreamAvailability() {
+            fetch(streamUrl).then(r => {
+                if (r.ok) {
+                    audioPlayer.src = streamUrl;
+                    playButton.style.display = 'block';
+                } else {
+                    selfMessage('Прямой эфир ещё не начался...');
+                    checkFallbackStream();
+                }
+            }).catch(err => {
+                console.log('Ошибка стрима:', err);
+                checkFallbackStream();
+            });
+        }
+
+        function checkFallbackStream() {
+            fetch(streamUrlFall).then(r => {
+                if (r.ok) {
+                    audioPlayer.src = streamUrlFall;
+                    playButton.style.display = 'block';
+                } else {
+                    alert('Потоки недоступны');
+                }
+            }).catch(err => {
+                console.log('Ошибка запасного потока:', err);
+            });
+        }
+
+        window.onload = function () {
+            checkStreamAvailability();
+            fetchIcecastStatus();
+        }
+
+        setInterval(fetchIcecastStatus, 10000);
+    </script>
+
+    <script type="module" src="/pushClient.js"></script>
+    <button id="enablePush">Включить уведомления (BETA)</button>
+</body>
+
+</html>
