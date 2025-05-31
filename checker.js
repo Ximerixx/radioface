@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const { error } = require('console');
 
 // Универсальная инициализация fetch
 let fetch;
@@ -18,31 +19,34 @@ const SECRET_KEY = secretConfig.secretKey;
 
 
 async function checkStream() {
-    fetch(STREAM_URL, { method: 'GET' })
-        .then(response => {
-            if (response.ok) {
-                if (!isStreamOnline) {
-                    console.log('stream online, sending notification request...');
-                    sendNotification();
-                    console.log("Done.");
-                    isStreamOnline = true;
-                } else {
-                    if (isStreamOnline) {
-                        console.log('Stream is offline.');
-                        isStreamOnline = false;
-                    }
-                }
-                console.log('Stream status didnt changed.');
-                console.log(`stream thoughts ${isStreamOnline}`)
-            }
-        })
-        .catch(error => {
-            // Если возникла ошибка при попытке получения файла
-            //document.getElementById('playButton').style.display = 'none';
-            console.log('Checking caused an error:', error);
-        });
+    try {
+        const response = await fetch(STREAM_URL, { method: 'GET' });
 
+        if (response.ok) {
+            if (!isStreamOnline) {
+                console.log('Stream is online now — sending notifications...');
+                await sendNotification();
+                isStreamOnline = true;
+            } else {
+                console.log('Stream is still online. No action needed.');
+            }
+        } else {
+            // Ответ от сервера есть, но не 200 (например, 404)
+            if (isStreamOnline) {
+                console.log('Stream just went offline (status !== 200).');
+                isStreamOnline = false;
+            }
+        }
+
+    } catch (error) {
+        if (isStreamOnline) {
+            console.log('Stream just went offline (fetch error).');
+            isStreamOnline = false;
+        }
+        console.error('Error while checking stream:', error);
+    }
 }
+
 
 
 async function sendNotification() {
