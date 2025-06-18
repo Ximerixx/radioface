@@ -135,6 +135,36 @@ app.post('/sendNotification', (req, res) => {
         });
 });
 
+// Endpoint to provide UI configuration for the client
+app.get('/ui-config', (req, res) => {
+    try {
+        const configPath = path.resolve(__dirname, 'ui-config.json');
+        if (fs.existsSync(configPath)) {
+            const configData = fs.readFileSync(configPath, 'utf-8');
+            const config = JSON.parse(configData);
+            res.json(config);
+        } else {
+            // Fallback to default config if file doesn't exist
+            res.json({
+                logoUrl: '/VisitForeground.png',
+                showListenersCount: true,
+                showTrackInfo: true,
+                showPodcastName: false,
+                podcastName: ''
+            });
+        }
+    } catch (error) {
+        console.error('Error reading ui-config.json:', error);
+        // Return default config on error
+        res.json({
+            logoUrl: '/VisitForeground.png',
+            showListenersCount: true,
+            showTrackInfo: true,
+            showPodcastName: false,
+            podcastName: ''
+        });
+    }
+});
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });

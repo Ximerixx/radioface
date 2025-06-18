@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const subscription = await registration.pushManager.getSubscription();
     if (subscription) {
         console.log('Уже подписан:', subscription);
-        button.style.display = 'none'; // Скрыть кнопку, если подписан
+        // button.style.display = 'none'; // Скрыть кнопку, если подписан
+        buttonUpdate();
         return;
     }
 
@@ -46,13 +47,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 body: JSON.stringify(newSubscription)
             });
 
-            button.style.display = 'none'; // Скрыть кнопку после подписки
+            //button.style.display = 'none'; // Скрыть кнопку после подписки
+            buttonUpdate();
         } catch (err) {
             console.error('Ошибка подписки:', err);
         }
     });
 });
-
+async function buttonUpdate() {
+    const button = document.getElementById('enablePush');
+    button.textContent = 'Вы уже подписались — спасибо!';
+    button.style.backgroundColor = '#4CAF50'; // Зеленый
+    button.style.color = 'white';
+    button.disabled = true;
+}
 // Функция для преобразования base64 -> Uint8Array
 function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
