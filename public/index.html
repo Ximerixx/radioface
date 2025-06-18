@@ -262,12 +262,27 @@
         #listenersCount {
             width: fit-content;
         }
+
+        #podcastName {
+            display: none;
+            font-size: 2.2em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff9800, #ff3c3c, #8e54e9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+            margin-bottom: 10px;
+            letter-spacing: 1.5px;
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="content">
+
         <div class="input-container">
             <!-- <img src="https://next.durka.su/s/NyK4yBRJGQ827Zg/download/VisitForeground.png" id="logo" alt="" srcset="" width="40%" > -->
             <img src="VisitForeground.png" id="logo" alt="" srcset="" width="40%">
@@ -286,6 +301,7 @@
 
 
     </div>
+    <div id="podcastName">Подкаст</div>
     <div id="chat"></div>
 
     <div class="input-container">
@@ -328,6 +344,11 @@
         let socket;
         let reconnectTimeout = null;
         let currentLogoUrl = null;
+        let currentUiConfig = null;
+
+        function deepEqual(obj1, obj2) {
+            return JSON.stringify(obj1) === JSON.stringify(obj2);
+        }
 
         function connectWebSocket() {
             const socketUrl = `wss://${window.location.hostname}`;
@@ -339,7 +360,7 @@
                     clearTimeout(reconnectTimeout);
                     reconnectTimeout = null;
                 }
-                systemMessage('Чат переподключен!');
+                //systemMessage('Чат переподключен!');
             };
 
             socket.onmessage = (event) => {
@@ -358,9 +379,9 @@
 
             socket.onclose = (event) => {
                 console.warn('WebSocket closed, attempting to reconnect...');
-                systemMessage('Чат отключен, переподключение...');
+                //systemMessage('Чат отключен, переподключение...');
                 reconnectTimeout = setTimeout(() => {
-                    systemMessage('Пробуем переподключиться...');
+                    //systemMessage('Пробуем переподключиться...');
                     connectWebSocket();
                 }, 2000);
             };
@@ -521,6 +542,7 @@
                 const configResponse = await fetch('/ui-config');
                 if (configResponse.ok) {
                     const config = await configResponse.json();
+                    console.log('uiConfig received:', config);
                     // Set logo
                     if (config.logoUrl) {
                         const logoImg = document.getElementById('logo');
@@ -532,16 +554,13 @@
                     // Show/hide track info
                     const trackDiv = document.getElementById('currentTrack');
                     if (trackDiv) trackDiv.style.display = config.showTrackInfo ? '' : 'none';
-                    // Show/hide podcast name (future)
-                    let podcastDiv = document.getElementById('podcastName');
-                    if (!podcastDiv && config.showPodcastName) {
-                        podcastDiv = document.createElement('div');
-                        podcastDiv.id = 'podcastName';
-                        podcastDiv.textContent = config.podcastName || '';
-                        const statsDiv = document.getElementById('streamStats');
-                        if (statsDiv) statsDiv.insertBefore(podcastDiv, statsDiv.firstChild);
-                    } else if (podcastDiv) {
-                        podcastDiv.style.display = config.showPodcastName ? '' : 'none';
+                    // Show/hide podcast name (now always present)
+                    const podcastDiv = document.getElementById('podcastName');
+                    console.log('podcastDiv found:', podcastDiv);
+                    if (podcastDiv) {
+                        console.log('Setting podcast display:', config.showPodcastName ? 'block' : 'none');
+                        console.log('Setting podcast text:', config.podcastName || '');
+                        podcastDiv.style.setProperty('display', config.showPodcastName ? 'block' : 'none', 'important');
                         podcastDiv.textContent = config.podcastName || '';
                     }
                 }
@@ -555,6 +574,7 @@
                 const configResponse = await fetch('/ui-config');
                 if (configResponse.ok) {
                     const config = await configResponse.json();
+                    console.log('pollUiConfig received:', config);
                     // Hot-load logo if changed
                     if (config.logoUrl && config.logoUrl !== currentLogoUrl) {
                         const logoImg = document.getElementById('logo');
@@ -562,6 +582,15 @@
                             logoImg.src = config.logoUrl + '?t=' + Date.now(); // cache-busting
                         }
                         currentLogoUrl = config.logoUrl;
+                    }
+                    // Update podcast name and visibility
+                    const podcastDiv = document.getElementById('podcastName');
+                    console.log('pollUiConfig podcastDiv found:', podcastDiv);
+                    if (podcastDiv) {
+                        console.log('pollUiConfig setting podcast display:', config.showPodcastName ? 'block' : 'none');
+                        console.log('pollUiConfig setting podcast text:', config.podcastName || '');
+                        podcastDiv.style.setProperty('display', config.showPodcastName ? 'block' : 'none', 'important');
+                        podcastDiv.textContent = config.podcastName || '';
                     }
                     // Optionally, update other UI elements here if config changes
                 }
