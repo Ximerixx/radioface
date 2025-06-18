@@ -177,6 +177,18 @@ app.use((req, res) => {
     res.status(404).type('text/plain').send('Not Found');
 });
 
+// Endpoint to provide UI configuration for the client
+app.get('/ui-config', (req, res) => {
+    // In a real app, you could customize this per user/request
+    res.json({
+        logoUrl: '/VisitForeground.png',
+        showListenersCount: true,
+        showTrackInfo: true,
+        showPodcastName: false, // Not yet in HTML
+        podcastName: '' // Placeholder for future
+    });
+});
+
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT} VAPID: ${vapidKeys.publicKey}`);
 });
