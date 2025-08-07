@@ -3,8 +3,9 @@ $logFilePath = Join-Path -Path $appDataPath -ChildPath "Murglar\data\murglar.log
 $outputFilePath = Join-Path -Path (Get-Location) -ChildPath "nowplaying.txt"
 
 # pattern to extract track and artist
-$trackPattern = '@\w+\s.{4}([^-]+)\s-\s([^(]+)\([^)]+track-\d+\)'
-
+#$trackPattern = '@\w+\s.{4}([^-]+)\s-\s([^(]+)\([^)]+track-\d+\)' #failed to parse tracks with ( blah bladd, feat: , etc )
+#$trackPattern = 'for\s+(.+?)\s+-\s+(.+?)\s+\(ynd/myHistoryTracks/track-\d+\)' # hard link to ynd/myHistoryTracks/track-\d, but so fucking robust, my lord
+$trackPattern = 'for\s+(.+?)\s*-\s*(.+?)\s*\([^\)]*track-\d+\)' #good enough, wont work with only tracks that aren't numbers
 function Read-RawFile {
     param (
         [string]$filePath
